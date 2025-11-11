@@ -219,7 +219,7 @@ if __name__ == '__main__':
     args=config.parse_opt()
 
     img_dir=os.path.join(os.path.join(args.ROOT_PATH,'data/data_clean/images'))
-    p2_data=load_json(os.path.join(args.ROOT_PATH,'data/data_clean/split_data/test.json'))
+    p2_data=load_json(os.path.join(args.ROOT_PATH,'data/data_clean/split_data/val.json'))
     demo_data=load_json(os.path.join(args.ROOT_PATH,'data/data_clean/split_data/train.json'))
     print ('Training data: %d; Testing data:%d' % (len(demo_data),len(p2_data)))
     llm_name=args.LLM_NAME
@@ -256,7 +256,8 @@ if __name__ == '__main__':
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
             torch_dtype=torch.bfloat16,
-            device_map="cuda:0"
+            # device_map="cuda:0"
+            device_map="auto"
         )
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         tokenizer.pad_token = tokenizer.eos_token
@@ -298,13 +299,13 @@ if __name__ == '__main__':
             model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
                 "Qwen/Qwen2.5-VL-7B-Instruct", 
                 torch_dtype= torch.bfloat16, 
-                #device_map="auto"
-                device_map={"":"cuda:1"}
+                device_map="auto"
+                # device_map={"":"cuda:0"}
             )
             model.train(False)
             min_pixels = 64 * 28 * 28
             max_pixels = 64 * 28 * 28
-            processor = AutoProcessor.from_pretrained("Qwen/Qwen2.5-VL-7B-Instruct",
+            processor = AutoProcessor.from_pretrained("Qwen/Qwen2.5-VL-7B-Instruct", use_fast=False,
                                                       min_pixels=min_pixels, max_pixels=max_pixels)
             mllm_model={
                 'model':model,
@@ -361,7 +362,7 @@ if __name__ == '__main__':
             from transformers import AutoProcessor, Gemma3ForConditionalGeneration
             ckpt = "google/gemma-3-12b-it"
             model = Gemma3ForConditionalGeneration.from_pretrained(
-                ckpt, device_map="auto", torch_dtype=torch.bfloat16,
+                ckpt, device_map="cuda:0", torch_dtype=torch.bfloat16,
             )
             #model=model.bfloat16()
             #processor.padding_side="left"
@@ -399,7 +400,8 @@ if __name__ == '__main__':
                        args.DEBUG,args.ROOT_PATH)
 
     if os.path.exists(os.path.join(args.ROOT_PATH,'fc_detailed_results','_'.join([llm_name,mllm_name])))==False:
-        os.mkdir(os.path.join(args.ROOT_PATH,'fc_detailed_results','_'.join([llm_name,mllm_name])))
+        # os.mkdir(os.path.join(args.ROOT_PATH,'fc_detailed_results','_'.join([llm_name,mllm_name])))
+        os.makedirs(os.path.join(args.ROOT_PATH,'fc_detailed_results','_'.join([llm_name,mllm_name])), exist_ok=True)
     if os.path.exists(os.path.join(args.ROOT_PATH,'fc_detailed_results','_'.join([llm_name,mllm_name]),str(args.SAVE_NUM)+'.pkl')):
         all_results=load_pkl(os.path.join(args.ROOT_PATH,'fc_detailed_results','_'.join([llm_name,mllm_name]),str(args.SAVE_NUM)+'.pkl'))
     else:

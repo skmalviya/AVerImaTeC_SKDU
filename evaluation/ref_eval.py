@@ -10,7 +10,7 @@ import random
 angles=[Image.ROTATE_90,Image.ROTATE_180,Image.ROTATE_270]
 resizes=[(300,300),(100,500),(500,100)]
 
-root_dir=os.path.abspath('..')
+root_dir=os.path.abspath('.')
 text_val_demo=open(os.path.join(root_dir,
                                 "templates/evid_evaluation_text.txt")).readlines()
 text_val_demo="".join(text_val_demo)

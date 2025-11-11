@@ -1,5 +1,5 @@
 import os
-root_dir=os.path.abspath('..')
+root_dir=os.path.abspath('.')
 import torch
 
 def gen_incontext_input(ques,ans,demos):

@@ -76,7 +76,7 @@ if __name__ == '__main__':
                         default="")#this is the absolute path where you put AVerImaTec.
     parser.add_argument('--save_num', 
                         type=str,
-                        default="4")
+                        default="17")
     parser.add_argument('--eval_type', 
                         type=str,
                         default="evidence")
@@ -100,7 +100,7 @@ if __name__ == '__main__':
     mllm = genai.Client(http_options=HttpOptions(api_version="v1"),api_key=API_keys.GEMINI_API_KEY)
     mllm_name='gemini-2.0-flash-001'
 
-    p2_data=load_json(os.path.join(args.root_dir,'data/data_clean/split_data/test.json'))
+    p2_data=load_json(os.path.join(args.root_dir,'data/data_clean/split_data/val.json'))
     if args.human_pred==False:
         print ('Loading model predictions...')
         save_str='_'.join([args.llm_name,args.mllm_name])

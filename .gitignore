@@ -1,0 +1,23 @@
+# Python compiled files
+*.pyc
+__pycache__/
+
+# API-Key Files
+private_info/API_keys.py
+
+# Data directories
+data/
+evaluation/intermediate_info/
+fc_detailed_results/
+web_det_info_bak/
+web_det_info/
+
+# Temporary directories
+tras/
+
+# Archive files
+images.zip
+*.zip
+
+#Logs
+HPC_logs/

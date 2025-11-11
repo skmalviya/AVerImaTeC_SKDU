@@ -31,9 +31,10 @@ TEXT_QUES_PROMPT+="Question: %s. Document: %s. "
 TEXT_QUES_PROMPT+="If the question is not answerable according to the provided document, please answer as: No answer can be found. Start you answer as: **ANSWER:** "
 
 from transformers import AutoProcessor, CLIPModel
-clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").cuda()
+# clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").cuda()
+clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
 clip_model.eval()
-clip_processor = AutoProcessor.from_pretrained("openai/clip-vit-base-patch32")
+clip_processor = AutoProcessor.from_pretrained("openai/clip-vit-base-patch32", use_fast=True)
 
 def load_pkl(path):
     data=pkl.load(open(path,'rb'))
@@ -259,6 +260,14 @@ def reverse_image_search(ques_txt, img_idx,
             Here how many queries set 100 as default!!! 
             Can be changed!!!
             """
+            # Construct full nested path
+            nested_dir = os.path.join(path, "web_det_info", "reverse_image_search", "urls")
+            # Create all intermediate directories if they don't exist
+            os.makedirs(nested_dir, exist_ok=True)
+            # Construct full nested path
+            nested_dir = os.path.join(path, "web_det_info", "reverse_image_search", "scrap")
+            # Create all intermediate directories if they don't exist
+            os.makedirs(nested_dir, exist_ok=True)
             valid_web_urls=det_web_valid_filter(image,meta_date)
             json.dump(valid_web_urls,open(os.path.join(path,'web_det_info/reverse_image_search/urls',img_name+'.json'),'w'))
 
@@ -428,6 +437,15 @@ def text_search_text(ques_txt, img_idx,
         Here how many queries set 30 as default!!! 
         Can be changed!!!
         """
+        # Construct full nested path
+        nested_dir = os.path.join(path, "web_det_info", "text_search_text", "urls")
+        # Create all intermediate directories if they don't exist
+        os.makedirs(nested_dir, exist_ok=True)
+        # Construct full nested path
+        nested_dir = os.path.join(path, "web_det_info", "text_search_text", "scrap")
+        # Create all intermediate directories if they don't exist
+        os.makedirs(nested_dir, exist_ok=True)
+
         num_pages=3
         valid_web_urls=[]
         for page_num in range(num_pages):
